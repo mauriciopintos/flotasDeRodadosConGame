@@ -1,7 +1,56 @@
 import wollok.game.*
+import rodados.*
+import colores.*
 
 program corsasEnElGame {
-	// hacer las inicializaciones necesarias 
+	game.title("Corsas en el Game")
+	game.height(13) // usé 13 porque se va de pantalla con 15
+	game.width(15)
+	game.ground("playa.png")
+	
+	var rand1 = game.at((0..game.width()-1).anyOne(),(0..game.height()-1).anyOne())
+	var rand2 = game.at((0..game.width()-1).anyOne(),(0..game.height()-1).anyOne())
+	var rand3 = game.at((0..game.width()-1).anyOne(),(0..game.height()-1).anyOne())
+	
+	const c1  = new ChevroletCorsa(color=beige,position=rand1,juego=game)
+	const c2  = new ChevroletCorsa(color=verde,position=rand2,juego=game)
+	const c3  = new ChevroletCorsa(color=azul,position=rand3,juego=game)
+	
+	var activos =[c1,c2,c3]
+		
+	game.addVisual(c1)
+	game.addVisual(c2)
+	game.addVisual(c3)
+	
+	//MOVIMIENTOS
+
+	keyboard.right().onPressDo{ activos.forEach( { r => r.irDerecha() } ) }
+	keyboard.left().onPressDo{ activos.forEach( { r => r.irIzquierda() } ) }
+	keyboard.up().onPressDo{ activos.forEach( { r => r.subir() } ) }
+	keyboard.down().onPressDo{ activos.forEach( { r => r.bajar() } ) }
+
+	//COLORES
+	keyboard.n().onPressDo{ activos.forEach({ r => r.color(negro) } ) }
+	keyboard.v().onPressDo{ activos.forEach({ r => r.color(verde) } ) }
+	keyboard.r().onPressDo{ activos.forEach({ r => r.color(rojo) } ) }
+	keyboard.b().onPressDo{ activos.forEach({ r => r.color(beige) } ) }
+	keyboard.a().onPressDo{ activos.forEach({ r => r.color(azul) } ) }
+	
+	//ACCIONES
+	keyboard.l().onPressDo{ activos.forEach( { r => game.say(r,"\nAquí estoy") } ) } // localizar
+	keyboard.d().onPressDo{ activos.forEach( { r => game.removeVisual(r) } ) } // eliminar
+
+	keyboard.t().onPressDo( {
+		activos.forEach( { r => r.color(blanco) } )
+		activos.forEach( { r => game.say(r,"Me transformé en TRAFIC") } )
+		game.sound("bocina.mp3").play()
+	} )	// transformar
+	
+	//AUTO ACTIVO
+	keyboard.num1().onPressDo{ activos=[c1] } //Corsa1
+	keyboard.num2().onPressDo{ activos=[c2] } //Corsa2
+	keyboard.num3().onPressDo{ activos=[c3] } //Corsa3
+	keyboard.num0().onPressDo{ activos=[c1,c2,c3] } //Todos
 	
 	game.start()
 }
