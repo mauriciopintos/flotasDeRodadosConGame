@@ -1,0 +1,38 @@
+import rodados.*
+import pedidos.*
+import colores.*
+
+describe "Tes de Pedidos" {
+	// Globales del test
+	const cachito = new ChevroletCorsa(color=rojo)
+	const p1 = new Pedido(distancia = 960, tiempo= 8, pasajeros = 4)
+	const p2 = new Pedido(distancia = 960, tiempo= 8, pasajeros = 4)
+	const p3 = new Pedido(distancia = 960, tiempo= 8, pasajeros = 6)	
+	const p4 = new Pedido(distancia = 960, tiempo= 6, pasajeros = 4)
+	const c1 = #{azul, negro}
+	const c2 = #{azul, negro, rojo}
+	
+	fixture{
+		// Escenario inicial
+		p1.coloresIncompatibles().addAll(c1)
+		p2.coloresIncompatibles().addAll(c2)
+		p3.coloresIncompatibles().addAll(c1)
+		p4.coloresIncompatibles().addAll(c1)	
+	}
+	
+	test "Test: cachito sastiface pedido 1" {
+		assert.that(p1.satisfacePedido(cachito))
+		}
+		
+	test "Test: cachito sastiface pedido 2" {
+		assert.that(not p2.satisfacePedido(cachito))
+		}
+		
+	test "Test: cachito sastiface pedido 3" {
+		assert.that(not p3.satisfacePedido(cachito))
+		}
+		
+	test "Test: cachito sastiface pedido 4" {
+		assert.that(not p4.satisfacePedido(cachito))
+	}
+}
